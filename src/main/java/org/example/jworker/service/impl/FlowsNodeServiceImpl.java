@@ -53,7 +53,7 @@ public class FlowsNodeServiceImpl extends ServiceImpl<FlowsNodeMapper, FlowsNode
 
     @Override
     public boolean deleteNode(Integer id) {
-        FlowsTask flowsTask = iflowsTaskService.getOne(new LambdaQueryWrapper<FlowsTask>().eq(FlowsTask::getStepNodeId, id));
+        FlowsTask flowsTask = iflowsTaskService.getOne(new LambdaQueryWrapper<FlowsTask>().eq(FlowsTask::getStepNodeId, id),Boolean.FALSE);
         if (flowsTask==null){
             FlowsNode flowsNode = this.getById(id);
             if (flowsNode.getBeforeNodeId()==null && flowsNode.getNextNodeId() != null) {
@@ -85,7 +85,7 @@ public class FlowsNodeServiceImpl extends ServiceImpl<FlowsNodeMapper, FlowsNode
     @Transactional(rollbackFor = RuntimeException.class)
     public boolean updateNode(List<FlowsNode> flowsNodes) {
         for (FlowsNode flowsNode : flowsNodes) {
-            FlowsTask flowsTask = iflowsTaskService.getOne(new LambdaQueryWrapper<FlowsTask>().eq(FlowsTask::getStepNodeId, flowsNode.getId()));
+            FlowsTask flowsTask = iflowsTaskService.getOne(new LambdaQueryWrapper<FlowsTask>().eq(FlowsTask::getStepNodeId, flowsNode.getId()),Boolean.FALSE);
             if (flowsTask==null){
                 if (flowsNode.getUpdateType()==0){
                     // 更新顺序
