@@ -1,7 +1,6 @@
 package org.example.jworker.common.constant;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.Getter;
 
 /**
@@ -16,6 +15,9 @@ public enum FlowsTaskEnum {
     TASK_DEL_ON(1,"撤销"),
     TASK_REJECTED(1,"拒绝"),
     TASK_PASS(0,"通过"),
+    NODE_TYPE0(0,"会签"),
+    NODE_TYPE1(1,"或签"),
+    NODE_TYPE2(2,"执行"),
 
 
 

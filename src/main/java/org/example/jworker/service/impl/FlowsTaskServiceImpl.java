@@ -4,24 +4,25 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import net.bytebuddy.asm.Advice;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.example.jworker.common.constant.FlowsTaskEnum;
 import org.example.jworker.common.util.SysUtil;
-import org.example.jworker.model.entity.FlowsNode;
-import org.example.jworker.model.entity.FlowsRule;
-import org.example.jworker.model.entity.FlowsTask;
 import org.example.jworker.dao.FlowsTaskMapper;
+import org.example.jworker.model.entity.FlowsNode;
+import org.example.jworker.model.entity.FlowsTask;
+import org.example.jworker.model.entity.TaskNodeState;
 import org.example.jworker.model.query.FlowsTaskHandle;
 import org.example.jworker.model.query.FlowsTaskQuery;
 import org.example.jworker.model.vo.FlowsTaskShowVO;
 import org.example.jworker.service.IFlowsNodeService;
 import org.example.jworker.service.IFlowsTaskService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.example.jworker.service.ITaskNodeStateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * <p>
@@ -36,6 +37,9 @@ public class FlowsTaskServiceImpl extends ServiceImpl<FlowsTaskMapper, FlowsTask
 
     @Autowired
     private IFlowsNodeService iFlowsNodeService;
+
+    @Autowired
+    private ITaskNodeStateService iTasksService;
 
     @Override
     public boolean addTask(FlowsTask flowsTask) {
@@ -63,8 +67,30 @@ public class FlowsTaskServiceImpl extends ServiceImpl<FlowsTaskMapper, FlowsTask
         if (flowsTask == null){
             throw new RuntimeException("任务不存在...");
         }
+        FlowsNode node = iFlowsNodeService.getNodeById(flowsTask.getStepNodeId());
         // 处理任务
-        // 通过 推送下一节点的处理人
+        if (flowTaskHandle.getStatus().equals(FlowsTaskEnum.TASK_PASS.getId())){
+            // 通过 推送下一节点的处理人
+            if (node.getNodeType().equals(FlowsTaskEnum.NODE_TYPE0.getId())){
+                // 会签 节点全部处理人都要处理 有一人拒绝则本节点处理结束 todo: 暂时处理本任务结束
+                List<String> list = iTasksService.listObjs(new LambdaQueryWrapper<TaskNodeState>().select(TaskNodeState::getUserId)
+                        .eq(TaskNodeState::getTaskId, flowTaskHandle.getId())
+                        .eq(TaskNodeState::getNodeId, node.getId()));
+                if (list.isEmpty()){
+                    TaskNodeState taskNodeState = new TaskNodeState();
+                    taskNodeState.setTaskId(flowTaskHandle.getId());
+                    taskNodeState.setNodeId(node.getId());
+                    taskNodeState.setUserId(flowTaskHandle.getUserId());
+                    iTasksService.save(taskNodeState);
+                }else {
+
+                }
+                // 当前处理是最后一个 处理完通知下一节点
+                // 当前处理不是最后一个  处理完记录日志
+
+            }
+        }
+
         // 拒绝
 
 
