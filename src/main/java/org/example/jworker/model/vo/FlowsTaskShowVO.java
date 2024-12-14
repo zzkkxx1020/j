@@ -1,27 +1,21 @@
 package org.example.jworker.model.vo;
 
 import lombok.Data;
-import org.example.jworker.model.entity.FlowsNode;
-import org.example.jworker.model.entity.FlowsRule;
 import org.example.jworker.model.entity.FlowsTask;
 
 import java.util.List;
 
 @Data
-public class FlowsTaskShowVO extends FlowsTask {
+public class FlowsTaskShowVO{
 
     /**
-     * 对应规则
+     * 任务详情
      */
-    private FlowsRule flowsRule;
-
-    /**
-     * 处理工作流
-     */
-    private List<FlowsNode> nodeTree;
+    private FlowsTask flowsTask;
 
     /**
      * 处理记录
      */
 
+    private List<FlowsNodeVO> flowsNodeVOs;
 }

@@ -38,7 +38,7 @@ public interface IFlowsTaskService extends IService<FlowsTask> {
     public IPage<FlowsTask> getTaskList(FlowsTaskQuery flowTaskQuery);
 
     /**
-     * 产看任务详情
+     * 查看任务详情
      */
     public FlowsTaskShowVO getTaskById(Integer id);
 

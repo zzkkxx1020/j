@@ -10,6 +10,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 /**
  * <p>
@@ -45,4 +46,8 @@ public class TaskNodeState implements Serializable {
     @ApiModelProperty("处理人id")
     @TableField("user_id")
     private String userId;
+
+    @ApiModelProperty("创建时间")
+    @TableField("create_time")
+    private LocalDateTime createTime;
 }

@@ -4,16 +4,15 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import java.io.Serializable;
-import java.time.LocalDateTime;
-import java.util.List;
-
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * <p>
@@ -39,7 +38,7 @@ public class FlowsNode implements Serializable {
     @NotNull
     private Integer flowsRuleId;
 
-    @ApiModelProperty("该节点审批类型 0 会签  1 或签 2 执行")
+    @ApiModelProperty("该节点类型 0 会签  1 或签 2 执行")
     @TableField("node_type")
     @NotNull
     private Integer nodeType;
